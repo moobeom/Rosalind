@@ -62,11 +62,11 @@ def RecursiveOutputAlignment(backtrack,v,w,i,j):
 def IterativeOutputAlignment(backtrack,v,w,i,j):
     aligned_v, aligned_w = '', ''
     while i > 0 or j > 0:
-        if i > 0 and (j == 0 or backtrack[i][j] == "down"):
+        if backtrack[i][j] == "down":
             aligned_v += v[i-1]
             aligned_w += "-"
             i -= 1
-        elif j > 0 and (i == 0 or backtrack[i][j] == "right"):
+        elif backtrack[i][j] == "right":
             aligned_v += "-"
             aligned_w += w[j-1]
             j -= 1
@@ -75,7 +75,7 @@ def IterativeOutputAlignment(backtrack,v,w,i,j):
             aligned_w += w[j-1]
             i -= 1
             j -= 1
-    return (aligned_v[::-1],aligned_w[::-1])
+    return (aligned_v[::-1], aligned_w[::-1])
 
 
 if __name__ == '__main__':
