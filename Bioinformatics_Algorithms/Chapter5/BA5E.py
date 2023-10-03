@@ -46,12 +46,8 @@ def GlobalAlign(v,w,sigma,scoring_matrix):
     return backtrack,s[-1][-1]
 
 def RecursiveOutputAlignment(backtrack,v,w,i,j):
-    if i == 0 and j > 0:
-        return ("-",w[j-1])
-    elif i > 0 and j == 0:
-        return (v[i-1],"-")
-    elif i == 0 and j == 0:
-        return (v[i-1],w[j-1])
+    if i == 0 and j == 0:
+        return ("","")
     elif backtrack[i][j] == "down":
         return RecursiveOutputAlignment(backtrack,v,w,i-1,j) + (v[i-1],"-")
     elif backtrack[i][j] == "right":
@@ -79,10 +75,10 @@ def IterativeOutputAlignment(backtrack,v,w,i,j):
 
 
 if __name__ == '__main__':
-    lines = open('C:/Users/anqja/Downloads/rosalind_ba5e (1).txt').readlines()
+    lines = open('C:/Users/anqja/Downloads/rosalind_ba5e_sample.txt').readlines()
     v,w = lines[0].rstrip(), lines[1].rstrip()
     backtrack,score = GlobalAlign(v,w,sigma=5,scoring_matrix=BlOSUM62)
-    alignment = IterativeOutputAlignment(backtrack,v,w,len(v),len(w))
+    alignment = RecursiveOutputAlignment(backtrack,v,w,len(v),len(w))
 
     aligned_v,aligned_w = "",""
     for i in range(len(alignment)//2):
