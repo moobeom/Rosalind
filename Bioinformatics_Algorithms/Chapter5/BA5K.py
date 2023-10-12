@@ -23,16 +23,15 @@ BlOSUM62 = [[4, 0, -2, -1, -2, 0, -2, -1, -1, -1, -1, -2, -1, -1, -1,  1, 0, 0, 
 alphabet = ['A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y']
 
 
-def MiddleEdge(v, w, top, bottom, left, right, sigma, scoring_matrix):
+def MiddleEdge(v, w, top, bottom, left, right, sigma=None, scoring_matrix=None):
     mid = (left + right) // 2
     n, m = bottom - top, right - left
 
     FromSource = [0] * (n+1)
-    for j in range(1,mid):
+    for j in range(1,mid+1):
         s = [0] * (n+1)
         for i in range(1,n+1):
-            #match_score = scoring_matrix[alphabet.index(v[i-1])][alphabet.index(w[j-1])]
-            match_score = 1 if v[i-1] == w[j-1] else 0
+            match_score = scoring_matrix[alphabet.index(v[i-1])][alphabet.index(w[j-1])]
             s[i] = max(s[i-1] - sigma, FromSource[i] - sigma, FromSource[i-1] + match_score)
         FromSource = s
 
@@ -40,15 +39,25 @@ def MiddleEdge(v, w, top, bottom, left, right, sigma, scoring_matrix):
     for j in range(1,mid+1):
         s = [0] * (n+1)
         for i in range(n-1,-1,-1):
-            # match_score = scoring_matrix[alphabet.index(v[i-1])][alphabet.index(w[j-1])]
-            match_score = 1 if v[i-1] == w[j-1] else 0
+            match_score = scoring_matrix[alphabet.index(v[i-1])][alphabet.index(w[j-1])]
             s[i] = max(s[i+1] - sigma, ToSink[i] - sigma, ToSink[i+1] + match_score)
         ToSink = s
 
     Length = [FromSource[i] + ToSink[i] for i in range(n+1)]
-    return (Length.index(max(Length)),mid)
+    midNode = (Length.index(max(Length)),mid)
+    match_score = scoring_matrix[alphabet.index(v[midNode[0]])][alphabet.index(w[midNode[1]])]
+    s = max(Length[midNode[0]+1], Length[midNode[0]] - sigma, Length[midNode[0]] + match_score)
+    if s == Length[midNode[0]+1]:
+        x,y = midNode[0] + 1, mid
+    elif s == Length[midNode[0]] - sigma:
+        x,y = Length[midNode[0]], mid + 1
+    else:
+        x,y = midNode[0] + 1, mid + 1
+    return midNode,(x,y)
 
 if __name__ =='__main__':
-    lines = open('C:/Users/moveo/Downloads/rosalind_ba5k_sample2.txt').readlines()
+    lines = open('C:/Users/moveo/Downloads/rosalind_ba5k_sample.txt').readlines()
     v, w = lines[0].rstrip(), lines[1].rstrip()
-    print(MiddleEdge(v,w,0,len(v),0,len(w),sigma=0,scoring_matrix=BlOSUM62))
+    start,end = MiddleEdge(v,w,0,len(v),0,len(w),sigma=5,scoring_matrix=BlOSUM62)
+    print('{} {}'.format(start, end))
+
