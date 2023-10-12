@@ -60,4 +60,3 @@ if __name__ =='__main__':
     v, w = lines[0].rstrip(), lines[1].rstrip()
     start,end = MiddleEdge(v,w,0,len(v),0,len(w),sigma=5,scoring_matrix=BlOSUM62)
     print('{} {}'.format(start, end))
-
