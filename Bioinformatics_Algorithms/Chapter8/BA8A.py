@@ -5,9 +5,8 @@ def getData(filename):
     k,m = int(lines[0].split()[0]), int(lines[0].split()[1])
     DataPoints = []
     for line in lines[1:]:
-        (x,y) = [i for i in line.split()]
-        DataPoints.append((float(x),float(y)))
-    return k,m,DataPoints
+        DataPoints.append(tuple(float(line.split()[i]) for i in range(m)))
+    return k,DataPoints
 
 def Distance(DataPoints,Centers):
     D = []
@@ -25,7 +24,8 @@ def FarthestFirstTraversal(Data,k):
         Centers.add(Datapoint)
     return Centers
 
-k,m,DataPoints = getData("C:/Users/anqja/Downloads/rosalind_ba8a.txt")
-centers = FarthestFirstTraversal(DataPoints,k)
-for center in centers:
-    print('{} {}'.format(center[0],center[1]))
+if __name__ == '__main__':
+    k, DataPoints = getData("C:/Users/moveo/Downloads/rosalind_ba8a (2).txt")
+    centers = FarthestFirstTraversal(DataPoints,k)
+    for center in centers:
+        print(' '.join([str(coord) for coord in center]))
